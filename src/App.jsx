@@ -212,6 +212,7 @@ export default function App() {
       {/* Header */}
       <div style={header}>
         <img src="/logo.png" alt="Protagonist Ink" style={headerLogo} />
+        <a href="mailto:hello@protagonist.ink" style={headerLink}>Questions? Email Me</a>
       </div>
 
       {/* Progress */}
@@ -224,8 +225,7 @@ export default function App() {
           {/* Welcome */}
           {current.type === "welcome" && (
             <div>
-              <img src="/logo.png" alt="Protagonist Ink" style={welcomeLogo} />
-              <div style={pill}>Creator · Talent · Entrepreneur</div>
+              <div style={pill}>New Project Questionnaire</div>
               <h1 style={display}>{current.section.title}</h1>
               <p style={{ ...body, color: `${INK}70`, marginTop: 16, maxWidth: 480 }}>
                 {current.section.subtitle}
@@ -333,15 +333,25 @@ const wrap = {
 };
 const header = {
   display: "flex",
-  justifyContent: "flex-start",
+  justifyContent: "space-between",
   alignItems: "center",
   padding: "20px 32px",
   borderBottom: `1px solid ${INK}08`,
+  gap: 24,
 };
 const headerLogo = {
   display: "block",
   width: 164,
   height: "auto",
+};
+const headerLink = {
+  fontFamily: "'Satoshi', system-ui, sans-serif",
+  fontSize: 12,
+  color: INK,
+  letterSpacing: "0.08em",
+  textTransform: "uppercase",
+  textDecoration: "none",
+  whiteSpace: "nowrap",
 };
 const card = {
   flex: 1,
@@ -409,12 +419,6 @@ const pill = {
   color: RUST,
   textTransform: "uppercase",
   marginBottom: 20,
-};
-const welcomeLogo = {
-  display: "block",
-  width: "min(220px, 55vw)",
-  height: "auto",
-  marginBottom: 28,
 };
 const nav = {
   display: "flex",
