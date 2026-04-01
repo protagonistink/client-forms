@@ -217,6 +217,10 @@ const TOTAL_QUESTIONS = STEPS.filter((s) => s.type === "question").length;
 
 // ─── Notion submit ─────────────────────────────────────────────────────────────
 async function submitToNotion(answers, clientPageId) {
+  if (!NOTION_TOKEN) {
+    throw new Error("Missing VITE_NOTION_TOKEN. Add it to your local .env file before submitting.");
+  }
+
   // 1. Create a new "Creative Brief" page inside the client's project page
   const createRes = await fetch("https://api.notion.com/v1/pages", {
     method: "POST",
