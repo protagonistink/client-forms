@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { SECTIONS } from "../shared/briefSchema.mjs";
 
 // ─── Brand tokens ─────────────────────────────────────────────────────────────
 const INK = "#2C2C2C";
@@ -6,196 +7,10 @@ const RUST = "#C83C2F";
 const WARM_WHITE = "#FAFAFA";
 const COOL_GRAY = "#9C9EA2";
 
-// ─── Notion config ────────────────────────────────────────────────────────────
-// Token comes from the environment. Client page ID comes from the URL: ?client=PAGE_ID
-const NOTION_TOKEN = import.meta.env.VITE_NOTION_TOKEN;
-const NOTION_VERSION = "2022-06-28";
-
 function getClientPageId() {
   const params = new URLSearchParams(window.location.search);
   return params.get("client") || null;
 }
-
-// ─── Questions ────────────────────────────────────────────────────────────────
-const SECTIONS = [
-  {
-    id: "intro",
-    type: "welcome",
-    title: "Let's build your brief.",
-    subtitle:
-      "This isn't a CV or a polished pitch — it's raw material for your story. Answer in your real voice, without trying to sound \u201cofficial.\u201d",
-    cta: "Let's go",
-  },
-  {
-    id: "project",
-    label: "THE PROJECT",
-    questions: [
-      {
-        id: "what_you_do",
-        label: "In your own words, how do you describe what you do when you\u2019re talking to peers or your audience?",
-        hint: "Don\u2019t polish it. A messy brain dump is perfect.",
-        type: "textarea",
-        required: true,
-      },
-      {
-        id: "why_now",
-        label: "What\u2019s not working about the current version of your brand?",
-        hint: "What triggered the need to evolve it?",
-        type: "textarea",
-        required: true,
-      },
-      {
-        id: "platforms",
-        label: "Where do you mostly show up and do business right now?",
-        hint: "List the main places: platforms, websites, communities, collaborations, and any IRL spaces or events.",
-        type: "textarea",
-        required: true,
-      },
-    ],
-  },
-  {
-    id: "audience",
-    label: "YOUR AUDIENCE",
-    questions: [
-      {
-        id: "primary_audience",
-        label: "Who\u2019s your main audience right now?",
-        hint: "Think of the kind of person who follows you closely or actually buys from you. Describe them like real people: what are they hoping to feel, fix, escape, learn, or become when they come to you?",
-        type: "textarea",
-        required: true,
-      },
-      {
-        id: "why_they_choose_you",
-        label: "When someone decides to pay you, what\u2019s usually happening?",
-        hint: "What do they say they\u2019re paying for when they choose you?",
-        type: "textarea",
-        required: true,
-      },
-      {
-        id: "biggest_objection",
-        label: "What\u2019s the biggest hesitation you hear before someone commits?",
-        hint: "If you had to name the most common \u201calmost, but\u2026\u201d reason \u2014 price, uncertainty, time, fear of judgment, not clear on what they get \u2014 what is it?",
-        type: "textarea",
-        required: false,
-      },
-    ],
-  },
-  {
-    id: "positioning",
-    label: "COMPETITION & POSITIONING",
-    questions: [
-      {
-        id: "competitors",
-        label: "Who else does what you do?",
-        hint: "List 2 to 5 creators or brands in your space \u2014 names, handles, links. Don\u2019t overthink it.",
-        type: "textarea",
-        required: false,
-      },
-      {
-        id: "what_makes_you_different",
-        label: "What makes you the right choice over them?",
-        hint: "One clear sentence. Not future-you \u2014 who you actually are right now.",
-        type: "textarea",
-        required: true,
-      },
-      {
-        id: "proof_points",
-        label: "Back it up.",
-        hint: "Give 2 to 3 specifics: a skill you own, a track record, a niche audience you already have, something you do that others don\u2019t or won\u2019t.",
-        type: "textarea",
-        required: false,
-      },
-    ],
-  },
-  {
-    id: "brand",
-    label: "YOUR BRAND CHARACTER",
-    questions: [
-      {
-        id: "whats_off",
-        label: "What feels confusing or \u201coff\u201d about your brand right now?",
-        hint: "Where do you notice inconsistency? Visuals, voice, content, offers, the audience you\u2019re attracting, or the opportunities you\u2019re getting? And if this project goes well, what problem does it solve for you?",
-        type: "textarea",
-        required: true,
-      },
-      {
-        id: "brand_words",
-        label: "If someone had to describe your brand in just 4\u20136 words, what would you want those words to be?",
-        hint: "",
-        type: "textarea",
-        required: true,
-      },
-      {
-        id: "feels_like",
-        label: "What are 3 references you want this to feel like?",
-        hint: "Brands, creators, films, photographers, fashion, hotels \u2014 anything. For each one, tell me what you\u2019re borrowing: mood, pacing, color, tone, confidence, elegance, intimacy, edge.",
-        type: "textarea",
-        required: true,
-      },
-      {
-        id: "avoid",
-        label: "What are 3 things you absolutely don\u2019t want to be associated with anymore?",
-        hint: "Clich\u00e9s in your space, certain aesthetics, certain language, content angles \u2014 anything that makes you cringe.",
-        type: "textarea",
-        required: true,
-      },
-      {
-        id: "core_identity",
-        label: "What\u2019s the core of you that can\u2019t change no matter how the brand evolves?",
-        hint: "Values, tone, the kind of experience you create, what you stand for, what you\u2019ll never compromise.",
-        type: "textarea",
-        required: false,
-      },
-      {
-        id: "platform_restrictions",
-        label: "Are there any rules we have to design around?",
-        hint: "Anything you can\u2019t say or show publicly \u2014 platform restrictions, privacy, legal boundaries, or personal limits.",
-        type: "textarea",
-        required: false,
-      },
-      {
-        id: "existing_assets",
-        label: "What should I look at before I start?",
-        hint: "Share any existing assets: photos, logos, old bios, past brand decks, color preferences, favorite posts, links to accounts, or anything that represents you at your best.",
-        type: "textarea",
-        required: false,
-      },
-    ],
-  },
-  {
-    id: "deliverables",
-    label: "WHAT WE\u2019RE BUILDING & WHERE WE\u2019RE GOING",
-    questions: [
-      {
-        id: "deliverables",
-        label: "What are we making together, exactly?",
-        hint: "List the deliverables you want at the end of this project. Be as specific as you can. (Ex: a new positioning statement, an updated bio, content pillars, a website, a brand voice guide, etc.)",
-        type: "textarea",
-        required: true,
-      },
-      {
-        id: "if_this_works",
-        label: "If this works, what does it unlock for you over the next 12 months?",
-        hint: "Income, audience, opportunities, lifestyle, privacy \u2014 whatever matters most to you.",
-        type: "textarea",
-        required: true,
-      },
-      {
-        id: "anything_else",
-        label: "Anything else I should know that might affect the strategy?",
-        hint: "Weird context, sensitivities, sacred cows, things you\u2019ve already tried, hard constraints, or instincts you want me to respect \u2014 or push back on.",
-        type: "textarea",
-        required: false,
-      },
-    ],
-  },
-  {
-    id: "submit",
-    type: "submit",
-    title: "That\u2019s everything.",
-    subtitle: "I\u2019ll review this and we\u2019ll talk. Expect me to push back on a few things \u2014 that\u2019s the job.",
-  },
-];
 
 // ─── Build flat step list ──────────────────────────────────────────────────────
 function buildSteps(sections) {
@@ -217,99 +32,24 @@ const TOTAL_QUESTIONS = STEPS.filter((s) => s.type === "question").length;
 
 // ─── Notion submit ─────────────────────────────────────────────────────────────
 async function submitToNotion(answers, clientPageId) {
-  if (!NOTION_TOKEN) {
-    throw new Error("Missing VITE_NOTION_TOKEN. Add it to your local .env file before submitting.");
-  }
-
-  // 1. Create a new "Creative Brief" page inside the client's project page
-  const createRes = await fetch("https://api.notion.com/v1/pages", {
+  const response = await fetch("/api/creative-brief", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${NOTION_TOKEN}`,
       "Content-Type": "application/json",
-      "Notion-Version": NOTION_VERSION,
     },
     body: JSON.stringify({
-      parent: { page_id: clientPageId },
-      icon: { type: "emoji", emoji: "🎭" },
-      properties: {
-        title: [{ type: "text", text: { content: "Creative Brief" } }],
-      },
+      answers,
+      clientPageId,
     }),
   });
 
-  if (!createRes.ok) {
-    const err = await createRes.json();
-    throw new Error(err.message || "Failed to create brief page");
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(payload.error || "Failed to create brief page.");
   }
 
-  const newPage = await createRes.json();
-  const briefPageId = newPage.id;
-
-  // 2. Build content blocks from answers
-  const blocks = [];
-
-  SECTIONS.forEach((section) => {
-    if (section.type === "welcome" || section.type === "submit") return;
-
-    blocks.push({
-      object: "block",
-      type: "heading_2",
-      heading_2: {
-        rich_text: [{ type: "text", text: { content: section.label } }],
-        color: "gray",
-      },
-    });
-
-    section.questions.forEach((q) => {
-      const answer = answers[q.id]?.trim();
-
-      blocks.push({
-        object: "block",
-        type: "paragraph",
-        paragraph: {
-          rich_text: [
-            {
-              type: "text",
-              text: { content: q.label + "\n" },
-              annotations: { bold: true },
-            },
-            {
-              type: "text",
-              text: { content: answer || "(not answered)" },
-              annotations: { color: answer ? "default" : "gray" },
-            },
-          ],
-        },
-      });
-    });
-
-    blocks.push({ object: "block", type: "divider", divider: {} });
-  });
-
-  // 3. Append blocks to the new brief page (max 100 at a time)
-  const chunkSize = 100;
-  for (let i = 0; i < blocks.length; i += chunkSize) {
-    const chunk = blocks.slice(i, i + chunkSize);
-    const appendRes = await fetch(
-      `https://api.notion.com/v1/blocks/${briefPageId}/children`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${NOTION_TOKEN}`,
-          "Content-Type": "application/json",
-          "Notion-Version": NOTION_VERSION,
-        },
-        body: JSON.stringify({ children: chunk }),
-      }
-    );
-    if (!appendRes.ok) {
-      const err = await appendRes.json();
-      throw new Error(err.message || "Failed to write brief content");
-    }
-  }
-
-  return briefPageId;
+  return payload.pageId;
 }
 
 // ─── Components ───────────────────────────────────────────────────────────────
