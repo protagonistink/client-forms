@@ -4,7 +4,7 @@ export const SECTIONS = [
     type: "welcome",
     title: "Let's sketch out your story.",
     subtitle:
-      "This isn't a CV or a polished pitch, it's raw material for your new brand story. Answer in your real voice, without worrying about sounding official, rehearsed, or right. Unfiltered brain dumps are great starting places.",
+      "Answer as best you can, as real as possible. Unfiltered brain dumps create perfect raw material for your brand.",
     cta: "Let's go",
   },
   {
