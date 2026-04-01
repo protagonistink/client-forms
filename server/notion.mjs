@@ -2,6 +2,7 @@ import { SECTIONS } from "../shared/briefSchema.mjs";
 
 const NOTION_VERSION = "2022-06-28";
 const DEFAULT_FALLBACK_PARENT_PAGE_ID = "47b924a37f5b4d629ee0e0cca8330e67";
+const DEFAULT_NOTIFY_USER_ID = "1a0d872b-594c-81de-acdb-000258c062fd";
 
 function getNotionToken(env) {
   return env.NOTION_TOKEN || env.VITE_NOTION_TOKEN || "";
@@ -9,6 +10,10 @@ function getNotionToken(env) {
 
 function getFallbackParentPageId(env) {
   return env.NOTION_FALLBACK_PARENT_PAGE_ID || DEFAULT_FALLBACK_PARENT_PAGE_ID;
+}
+
+function getNotifyUserId(env) {
+  return env.NOTION_NOTIFY_USER_ID || DEFAULT_NOTIFY_USER_ID;
 }
 
 function json(res, statusCode, body) {
@@ -44,7 +49,7 @@ function buildBlocks(answers) {
       type: "heading_2",
       heading_2: {
         rich_text: [{ type: "text", text: { content: section.label } }],
-        color: "gray",
+        color: "default",
       },
     });
 
@@ -56,7 +61,7 @@ function buildBlocks(answers) {
         type: "heading_3",
         heading_3: {
           rich_text: [{ type: "text", text: { content: question.label } }],
-          color: "brown",
+          color: "blue",
         },
       });
 
@@ -117,7 +122,40 @@ async function notionRequest(path, token, options = {}) {
   return payload;
 }
 
-async function createBriefInNotion({ answers, clientPageId, fallbackParentPageId, token }) {
+async function createSubmissionNotification({ createdPageId, notifyUserId, parentPageId, token }) {
+  if (!notifyUserId) {
+    return;
+  }
+
+  await notionRequest("/comments", token, {
+    method: "POST",
+    body: JSON.stringify({
+      parent: { page_id: parentPageId },
+      rich_text: [
+        {
+          type: "mention",
+          mention: {
+            type: "user",
+            user: { id: notifyUserId },
+          },
+        },
+        {
+          type: "text",
+          text: { content: " New submitted creative brief is ready for review." },
+        },
+        {
+          type: "mention",
+          mention: {
+            type: "page",
+            page: { id: createdPageId },
+          },
+        },
+      ],
+    }),
+  });
+}
+
+async function createBriefInNotion({ answers, clientPageId, fallbackParentPageId, notifyUserId, token }) {
   const parentPageId = clientPageId || fallbackParentPageId;
 
   const createdPage = await notionRequest("/pages", token, {
@@ -127,7 +165,7 @@ async function createBriefInNotion({ answers, clientPageId, fallbackParentPageId
       icon: { type: "emoji", emoji: "🎭" },
       properties: {
         title: {
-          title: [{ type: "text", text: { content: "Creative Brief" } }],
+          title: [{ type: "text", text: { content: "Submitted Creative Brief" } }],
         },
       },
     }),
@@ -140,6 +178,17 @@ async function createBriefInNotion({ answers, clientPageId, fallbackParentPageId
       method: "PATCH",
       body: JSON.stringify({ children: blocks.slice(index, index + 100) }),
     });
+  }
+
+  try {
+    await createSubmissionNotification({
+      createdPageId: createdPage.id,
+      notifyUserId,
+      parentPageId,
+      token,
+    });
+  } catch (error) {
+    console.error("Failed to create Notion submission notification", error);
   }
 
   return createdPage.id;
@@ -157,6 +206,7 @@ export async function handleCreativeBriefRequest(req, res, env) {
   }
 
   const fallbackParentPageId = getFallbackParentPageId(env);
+  const notifyUserId = getNotifyUserId(env);
 
   try {
     const { answers, clientPageId } = await readJsonBody(req);
@@ -169,6 +219,7 @@ export async function handleCreativeBriefRequest(req, res, env) {
       answers,
       clientPageId,
       fallbackParentPageId,
+      notifyUserId,
       token,
     });
     return json(res, 200, { ok: true, pageId });
