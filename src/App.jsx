@@ -167,10 +167,6 @@ export default function App() {
   }
 
   async function handleSubmit() {
-    if (!clientPageId) {
-      setError("No client page ID found in the URL. Make sure you're using the right link.");
-      return;
-    }
     setSubmitting(true);
     setError(null);
     try {
@@ -283,8 +279,8 @@ export default function App() {
                 {current.section.subtitle}
               </p>
               {!clientPageId && (
-                <p style={{ fontFamily: "'Satoshi', system-ui", fontSize: 13, color: RUST, marginTop: 16 }}>
-                  Something's off with your link. Let Patrick know so he can send you a new one.
+                <p style={{ fontFamily: "'Satoshi', system-ui", fontSize: 13, color: COOL_GRAY, marginTop: 16 }}>
+                  No client page is attached to this link, so your answers will land in the general intake queue.
                 </p>
               )}
               {error && (
@@ -293,7 +289,7 @@ export default function App() {
                 </p>
               )}
               <div style={{ display: "flex", gap: 12, marginTop: 40, flexWrap: "wrap" }}>
-                <Btn onClick={handleSubmit} disabled={submitting || !clientPageId}>
+                <Btn onClick={handleSubmit} disabled={submitting}>
                   {submitting ? "Sending..." : "Submit brief →"}
                 </Btn>
                 <Btn variant="secondary" onClick={prev}>← Review</Btn>

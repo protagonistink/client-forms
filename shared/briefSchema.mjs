@@ -20,15 +20,15 @@ export const SECTIONS = [
       },
       {
         id: "why_now",
-        label: "What's not working about the current version of your brand. What's making you want to evolve it?",
-        hint: "",
+        label: "What's not working about the current version of your brand?",
+        hint: "What's making you want to evolve it?",
         type: "textarea",
         required: true,
       },
       {
         id: "platforms",
-        label: "Where do you mostly show up and do business right now? List the main places: platforms, websites, communities, collaborations, and any IRL spaces/events.",
-        hint: "",
+        label: "Where do you mostly show up and do business right now?",
+        hint: "List the main places: platforms, websites, communities, collaborations, and any IRL spaces/events.",
         type: "textarea",
         required: true,
       },
@@ -47,8 +47,8 @@ export const SECTIONS = [
       },
       {
         id: "why_they_choose_you",
-        label: "When someone decides to hire you, what's usually happening? What do they say they're paying for when they choose you?",
-        hint: "",
+        label: "When someone decides to hire you, what's usually happening?",
+        hint: "What do they say they're paying for when they choose you?",
         type: "textarea",
         required: true,
       },
@@ -67,8 +67,8 @@ export const SECTIONS = [
     questions: [
       {
         id: "competitors",
-        label: "Who else does what you do? List 2 to 5 creators or brands in your space (names, handles, links). Don't overthink it.",
-        hint: "",
+        label: "Who else does what you do?",
+        hint: "List 2 to 5 creators or brands in your space (names, handles, links). Don't overthink it.",
         type: "textarea",
         required: false,
       },
@@ -81,7 +81,7 @@ export const SECTIONS = [
       },
       {
         id: "proof_points",
-        label: "Back it up.",
+        label: "Back up that answer.",
         hint: "Give 2 to 3 specifics: a skill you own, a track record, a niche audience you already have, something you do that others don't or won't.",
         type: "textarea",
         required: false,
@@ -174,6 +174,6 @@ export const SECTIONS = [
     id: "submit",
     type: "submit",
     title: "That's everything.",
-    subtitle: "I'll review this and we'll talk. Expect me to push back on a few things - that's the job.",
+    subtitle: "I'll review this before we talk through it on our upcoming discovery call. Expect me to push back on a few things (that's the job).",
   },
 ];

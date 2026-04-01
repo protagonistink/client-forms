@@ -1,9 +1,14 @@
 import { SECTIONS } from "../shared/briefSchema.mjs";
 
 const NOTION_VERSION = "2022-06-28";
+const DEFAULT_FALLBACK_PARENT_PAGE_ID = "47b924a37f5b4d629ee0e0cca8330e67";
 
 function getNotionToken(env) {
   return env.NOTION_TOKEN || env.VITE_NOTION_TOKEN || "";
+}
+
+function getFallbackParentPageId(env) {
+  return env.NOTION_FALLBACK_PARENT_PAGE_ID || DEFAULT_FALLBACK_PARENT_PAGE_ID;
 }
 
 function json(res, statusCode, body) {
@@ -92,11 +97,13 @@ async function notionRequest(path, token, options = {}) {
   return payload;
 }
 
-async function createBriefInNotion({ answers, clientPageId, token }) {
+async function createBriefInNotion({ answers, clientPageId, fallbackParentPageId, token }) {
+  const parentPageId = clientPageId || fallbackParentPageId;
+
   const createdPage = await notionRequest("/pages", token, {
     method: "POST",
     body: JSON.stringify({
-      parent: { page_id: clientPageId },
+      parent: { page_id: parentPageId },
       icon: { type: "emoji", emoji: "🎭" },
       properties: {
         title: {
@@ -129,18 +136,21 @@ export async function handleCreativeBriefRequest(req, res, env) {
     return json(res, 500, { error: "Missing NOTION_TOKEN on the server." });
   }
 
+  const fallbackParentPageId = getFallbackParentPageId(env);
+
   try {
     const { answers, clientPageId } = await readJsonBody(req);
-
-    if (!clientPageId) {
-      return json(res, 400, { error: "Missing clientPageId." });
-    }
 
     if (!answers || typeof answers !== "object") {
       return json(res, 400, { error: "Missing answers payload." });
     }
 
-    const pageId = await createBriefInNotion({ answers, clientPageId, token });
+    const pageId = await createBriefInNotion({
+      answers,
+      clientPageId,
+      fallbackParentPageId,
+      token,
+    });
     return json(res, 200, { ok: true, pageId });
   } catch (error) {
     return json(res, 500, { error: error.message || "Failed to create brief." });
