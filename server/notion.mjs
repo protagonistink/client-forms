@@ -53,14 +53,34 @@ function buildBlocks(answers) {
 
       blocks.push({
         object: "block",
+        type: "heading_3",
+        heading_3: {
+          rich_text: [{ type: "text", text: { content: question.label } }],
+          color: "brown",
+        },
+      });
+
+      if (question.hint) {
+        blocks.push({
+          object: "block",
+          type: "paragraph",
+          paragraph: {
+            rich_text: [
+              {
+                type: "text",
+                text: { content: question.hint },
+                annotations: { color: "gray" },
+              },
+            ],
+          },
+        });
+      }
+
+      blocks.push({
+        object: "block",
         type: "paragraph",
         paragraph: {
           rich_text: [
-            {
-              type: "text",
-              text: { content: `${question.label}\n` },
-              annotations: { bold: true },
-            },
             {
               type: "text",
               text: { content: answer || "(not answered)" },
