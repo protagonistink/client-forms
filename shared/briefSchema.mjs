@@ -4,7 +4,7 @@ export const SECTIONS = [
     type: "welcome",
     title: "Let's sketch out your story.",
     subtitle:
-      "Answer as best you can, as real as possible. Unfiltered brain dumps create perfect raw material for your brand.",
+      "This isn't a CV or a polished pitch - it's raw material for your story. Answer in your real voice, without trying to sound \"official.\"",
     cta: "Let's go",
   },
   {
@@ -13,22 +13,22 @@ export const SECTIONS = [
     questions: [
       {
         id: "what_you_do",
-        label: "In your own words, how do you describe what you do when you're talking to peers or your audience?",
-        hint: "Don't polish it. A messy brain dump is perfect.",
+        label: "In your own words, how do you describe what you do when you're talking to others in your industry? What about to your audience?",
+        hint: "(Don't polish it. A messy brain dump is perfect.)",
         type: "textarea",
         required: true,
       },
       {
         id: "why_now",
-        label: "What's not working about the current version of your brand. What triggered the need to evolve it?",
+        label: "What's not working about the current version of your brand. What's making you want to evolve it?",
         hint: "",
         type: "textarea",
         required: true,
       },
       {
         id: "platforms",
-        label: "Where do you mostly show up and do business right now?",
-        hint: "List the main places: platforms, websites, communities, collaborations, and any IRL spaces or events.",
+        label: "Where do you mostly show up and do business right now? List the main places: platforms, websites, communities, collaborations, and any IRL spaces/events.",
+        hint: "",
         type: "textarea",
         required: true,
       },
@@ -40,22 +40,22 @@ export const SECTIONS = [
     questions: [
       {
         id: "primary_audience",
-        label: "Who's your main audience right now?",
-        hint: "Think of the kind of person who follows you closely or actually buys from you. Describe them like real people: what are they hoping to feel, fix, escape, learn, or become when they come to you and your content?",
+        label: "Who's your main audience right now? Who follows you closely or actually buys from you?",
+        hint: "Describe them like real people: what are they hoping to feel, fix, escape, learn, or become when they come to you and your content?",
         type: "textarea",
         required: true,
       },
       {
         id: "why_they_choose_you",
-        label: "When someone decides to pay you, what's usually happening?",
-        hint: "What do they say they're paying for when they choose you?",
+        label: "When someone decides to hire you, what's usually happening? What do they say they're paying for when they choose you?",
+        hint: "",
         type: "textarea",
         required: true,
       },
       {
         id: "biggest_objection",
         label: "What's the biggest hesitation you hear before someone commits?",
-        hint: "If you had to name the most common almost, but... reason - price, uncertainty, time, fear of judgment, not clear on what they get - what is it?",
+        hint: "(Price, uncertainty, time, fear of judgment, not clear on what they get, etc.)",
         type: "textarea",
         required: false,
       },
@@ -94,7 +94,7 @@ export const SECTIONS = [
     questions: [
       {
         id: "whats_off",
-        label: "What feels confusing or off about your brand right now? Where do you notice inconsistency?",
+        label: "What feels confusing or \"off\" about your brand right now? Where do you notice inconsistency?",
         hint: "(Ex: Visuals, voice, content, offers, audience, opportunities)",
         type: "textarea",
         required: true,
@@ -137,7 +137,7 @@ export const SECTIONS = [
       {
         id: "existing_assets",
         label: "What should I look at before I start?",
-        hint: "Share any existing assets: photos, logos, old bios, past brand decks, color preferences, favorite posts, links to accounts, or anything that represents you at your best.",
+        hint: "Share any existing assets: old bios, brand decks, photography, social media, etc.",
         type: "textarea",
         required: false,
       },
@@ -149,8 +149,8 @@ export const SECTIONS = [
     questions: [
       {
         id: "deliverables",
-        label: "What are we making together, exactly? List the deliverables you want at the end of this project. Be as specific as you can.",
-        hint: "(Ex: full brand relaunch, an updated bio, content pillars & calendar, a website, a brand voice guide, etc.)",
+        label: "What specific deliverables are most important to you at the end of this project?",
+        hint: "",
         type: "textarea",
         required: true,
       },

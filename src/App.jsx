@@ -393,7 +393,6 @@ const hint = {
   color: COOL_GRAY,
   lineHeight: 1.5,
   margin: "8px 0 0",
-  fontStyle: "italic",
 };
 const textarea = {
   width: "100%",
