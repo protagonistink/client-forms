@@ -211,9 +211,7 @@ export default function App() {
     <div style={wrap}>
       {/* Header */}
       <div style={header}>
-        <span style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: 18, fontWeight: 500, color: INK }}>
-          Protagonist Ink
-        </span>
+        <img src="/logo.png" alt="Protagonist Ink" style={headerLogo} />
       </div>
 
       {/* Progress */}
@@ -226,7 +224,8 @@ export default function App() {
           {/* Welcome */}
           {current.type === "welcome" && (
             <div>
-              <div style={pill}>Creator · Influencer · Adult Entertainer</div>
+              <img src="/logo.png" alt="Protagonist Ink" style={welcomeLogo} />
+              <div style={pill}>Creator · Talent · Entrepreneur</div>
               <h1 style={display}>{current.section.title}</h1>
               <p style={{ ...body, color: `${INK}70`, marginTop: 16, maxWidth: 480 }}>
                 {current.section.subtitle}
@@ -334,10 +333,15 @@ const wrap = {
 };
 const header = {
   display: "flex",
-  justifyContent: "space-between",
+  justifyContent: "flex-start",
   alignItems: "center",
   padding: "20px 32px",
   borderBottom: `1px solid ${INK}08`,
+};
+const headerLogo = {
+  display: "block",
+  width: 164,
+  height: "auto",
 };
 const card = {
   flex: 1,
@@ -405,6 +409,12 @@ const pill = {
   color: RUST,
   textTransform: "uppercase",
   marginBottom: 20,
+};
+const welcomeLogo = {
+  display: "block",
+  width: "min(220px, 55vw)",
+  height: "auto",
+  marginBottom: 28,
 };
 const nav = {
   display: "flex",

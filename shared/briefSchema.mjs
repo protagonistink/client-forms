@@ -2,9 +2,9 @@ export const SECTIONS = [
   {
     id: "intro",
     type: "welcome",
-    title: "Let's build your brief.",
+    title: "Let's sketch out your story.",
     subtitle:
-      "This isn't a CV or a polished pitch — it's raw material for your story. Answer in your real voice, without trying to sound official.",
+      "This isn't a CV or a polished pitch, it's raw material for your new brand story. Answer in your real voice, without worrying about sounding official, rehearsed, or right. Unfiltered brain dumps are great starting places.",
     cta: "Let's go",
   },
   {
