@@ -192,11 +192,12 @@ export default function App() {
       <div style={wrap}>
         <div style={card}>
           <div style={slide}>
-            <div style={pill}>Brief received</div>
+            <div style={pill}>All set</div>
             <h1 style={display}>Your story's in good hands.</h1>
             <p style={{ ...body, color: `${INK}70`, marginTop: 16, maxWidth: 420 }}>
-              Patrick will review this and be in touch. Expect a real conversation — and probably a few pointed questions.
+              I'll look at your answers and reach out to set up next steps. I can't wait to dive in to your project.
             </p>
+            <p style={{ ...body, color: `${INK}50`, marginTop: 16 }}>— Patrick</p>
           </div>
         </div>
       </div>
