@@ -90,7 +90,7 @@ async function sendBriefEmail({ answers, apiKey }) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "Protagonist Ink <forms@protagonist.ink>",
+      from: "Protagonist Ink <hello@pkthewriter.com>",
       to: ["patrick@protagonist.ink"],
       subject: "Submitted Creative Brief",
       html,
