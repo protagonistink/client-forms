@@ -201,6 +201,9 @@ export default function App() {
             <p style={{ ...body, color: `${INK}70`, marginTop: 16, maxWidth: 420 }}>
               {BRIEF.received.body}
             </p>
+            {BRIEF.received.signoff && (
+              <p style={{ ...body, color: `${INK}50`, marginTop: 16 }}>{BRIEF.received.signoff}</p>
+            )}
           </div>
         </div>
       </div>

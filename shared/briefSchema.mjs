@@ -378,11 +378,12 @@ export const BRIEFS = {
     // Shown on the submit screen when the link has no ?client= page.
     showFallbackNote: true,
     received: {
-      pill: "Brief received",
+      pill: "All set",
       title: "Your story's in good hands.",
-      body: "Patrick will review this and be in touch. Expect a real conversation — and probably a few pointed questions.",
+      body: "I'll look at your answers and reach out to set up next steps. I can't wait to dive in to your project.",
+      signoff: "— Patrick",
     },
-    notionTitle: () => "Submitted Creative Brief",
+    title: () => "Submitted Creative Brief",
     notifyText: "New submitted creative brief is ready for review.",
   },
   sprint: {
@@ -396,7 +397,7 @@ export const BRIEFS = {
       title: "Your story's in good hands.",
       body: "Thanks for answering! It can feel like a lot. We'll review everything before our call and come with questions.",
     },
-    notionTitle: (answers) => {
+    title: (answers) => {
       const organization = answers.organization?.trim().slice(0, 120);
       return organization ? `Sprint Brief · ${organization}` : "Sprint Brief";
     },

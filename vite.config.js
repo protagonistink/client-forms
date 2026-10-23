@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
-import { handleCreativeBriefRequest } from "./server/notion.mjs";
+import { handleCreativeBriefRequest } from "./server/creativeBrief.mjs";
 
 function notionApiPlugin(mode) {
   const env = loadEnv(mode, process.cwd(), "");
