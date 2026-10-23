@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { SECTIONS } from "../shared/briefSchema.mjs";
+import { getBrief } from "../shared/briefSchema.mjs";
 
 // ─── Brand tokens ─────────────────────────────────────────────────────────────
 const INK = "#2C2C2C";
@@ -11,6 +11,9 @@ function getClientPageId() {
   const params = new URLSearchParams(window.location.search);
   return params.get("client") || null;
 }
+
+// ?package=sprint picks the Sprint brief; no package keeps the creative brief.
+const BRIEF = getBrief(new URLSearchParams(window.location.search).get("package"));
 
 // ─── Build flat step list ──────────────────────────────────────────────────────
 function buildSteps(sections) {
@@ -27,7 +30,7 @@ function buildSteps(sections) {
   return steps;
 }
 
-const STEPS = buildSteps(SECTIONS);
+const STEPS = buildSteps(BRIEF.sections);
 const TOTAL_QUESTIONS = STEPS.filter((s) => s.type === "question").length;
 
 // ─── Notion submit ─────────────────────────────────────────────────────────────
@@ -40,6 +43,7 @@ async function submitToNotion(answers, clientPageId) {
     body: JSON.stringify({
       answers,
       clientPageId,
+      packageId: BRIEF.id,
     }),
   });
 
@@ -192,10 +196,10 @@ export default function App() {
       <div style={wrap}>
         <div style={card}>
           <div style={slide}>
-            <div style={pill}>Brief received</div>
-            <h1 style={display}>Your story's in good hands.</h1>
+            <div style={pill}>{BRIEF.received.pill}</div>
+            <h1 style={display}>{BRIEF.received.title}</h1>
             <p style={{ ...body, color: `${INK}70`, marginTop: 16, maxWidth: 420 }}>
-              Patrick will review this and be in touch. Expect a real conversation — and probably a few pointed questions.
+              {BRIEF.received.body}
             </p>
           </div>
         </div>
@@ -221,7 +225,7 @@ export default function App() {
           {/* Welcome */}
           {current.type === "welcome" && (
             <div>
-              <div style={pill}>New Project Questionnaire</div>
+              <div style={pill}>{BRIEF.pill}</div>
               <h1 style={display}>{current.section.title}</h1>
               <p style={{ ...body, color: `${INK}70`, marginTop: 16, maxWidth: 480 }}>
                 {current.section.subtitle}
@@ -241,20 +245,37 @@ export default function App() {
                 <p style={hint}>{current.question.hint}</p>
               )}
               <div style={{ marginTop: 24 }}>
-                <textarea
-                  autoFocus
-                  value={answers[current.question.id] || ""}
-                  onChange={(e) =>
-                    setAnswers((a) => ({ ...a, [current.question.id]: e.target.value }))
-                  }
-                  onKeyDown={(e) => {
-                    if ((e.metaKey || e.ctrlKey) && e.key === "Enter" && canAdvance()) next();
-                  }}
-                  rows={4}
-                  style={textarea}
-                  onFocus={(e) => (e.target.style.borderColor = RUST)}
-                  onBlur={(e) => (e.target.style.borderColor = `${INK}20`)}
-                />
+                {current.question.type === "text" ? (
+                  <input
+                    type="text"
+                    autoFocus
+                    value={answers[current.question.id] || ""}
+                    onChange={(e) =>
+                      setAnswers((a) => ({ ...a, [current.question.id]: e.target.value }))
+                    }
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && canAdvance()) next();
+                    }}
+                    style={textarea}
+                    onFocus={(e) => (e.target.style.borderColor = RUST)}
+                    onBlur={(e) => (e.target.style.borderColor = `${INK}20`)}
+                  />
+                ) : (
+                  <textarea
+                    autoFocus
+                    value={answers[current.question.id] || ""}
+                    onChange={(e) =>
+                      setAnswers((a) => ({ ...a, [current.question.id]: e.target.value }))
+                    }
+                    onKeyDown={(e) => {
+                      if ((e.metaKey || e.ctrlKey) && e.key === "Enter" && canAdvance()) next();
+                    }}
+                    rows={4}
+                    style={textarea}
+                    onFocus={(e) => (e.target.style.borderColor = RUST)}
+                    onBlur={(e) => (e.target.style.borderColor = `${INK}20`)}
+                  />
+                )}
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginTop: 24 }}>
                 <Btn onClick={next} disabled={!canAdvance()}>OK →</Btn>
@@ -278,7 +299,7 @@ export default function App() {
               <p style={{ ...body, color: `${INK}70`, marginTop: 16, maxWidth: 480 }}>
                 {current.section.subtitle}
               </p>
-              {!clientPageId && (
+              {!clientPageId && BRIEF.showFallbackNote && (
                 <p style={{ fontFamily: "'Satoshi', system-ui", fontSize: 13, color: COOL_GRAY, marginTop: 16 }}>
                   No client page is attached to this link, so your answers will land in the general intake queue.
                 </p>
