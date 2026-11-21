@@ -306,8 +306,6 @@ export const BRIEFS = {
     id: "creative",
     pill: "New Project Questionnaire",
     sections: CREATIVE_SECTIONS,
-    // Shown on the submit screen when the link has no ?client= page.
-    showFallbackNote: true,
     received: {
       pill: "All set",
       title: "Your story's in good hands.",
@@ -321,8 +319,6 @@ export const BRIEFS = {
     id: "sprint",
     pill: "Sprint Brief",
     sections: SPRINT_SECTIONS,
-    // The deposit-paid email link carries no client page, so skip the note.
-    showFallbackNote: false,
     received: {
       pill: "Brief received",
       title: "Your story's in good hands.",

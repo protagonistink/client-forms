@@ -33,8 +33,8 @@ function buildSteps(sections) {
 const STEPS = buildSteps(BRIEF.sections);
 const TOTAL_QUESTIONS = STEPS.filter((s) => s.type === "question").length;
 
-// ─── Notion submit ─────────────────────────────────────────────────────────────
-async function submitToNotion(answers, clientPageId) {
+// ─── Brief submission ────────────────────────────────────────────────────────
+async function submitBrief(answers, clientPageId) {
   const response = await fetch("/api/creative-brief", {
     method: "POST",
     headers: {
@@ -50,7 +50,7 @@ async function submitToNotion(answers, clientPageId) {
   const payload = await response.json().catch(() => ({}));
 
   if (!response.ok) {
-    throw new Error(payload.error || "Failed to create brief page.");
+    throw new Error(payload.error || "Failed to send brief.");
   }
 
   return payload.pageId;
@@ -174,7 +174,7 @@ export default function App() {
     setSubmitting(true);
     setError(null);
     try {
-      await submitToNotion(answers, clientPageId);
+      await submitBrief(answers, clientPageId);
       setSubmitted(true);
     } catch (e) {
       setError(e.message);
@@ -302,11 +302,6 @@ export default function App() {
               <p style={{ ...body, color: `${INK}70`, marginTop: 16, maxWidth: 480 }}>
                 {current.section.subtitle}
               </p>
-              {!clientPageId && BRIEF.showFallbackNote && (
-                <p style={{ fontFamily: "'Satoshi', system-ui", fontSize: 13, color: COOL_GRAY, marginTop: 16 }}>
-                  No client page is attached to this link, so your answers will land in the general intake queue.
-                </p>
-              )}
               {error && (
                 <p style={{ fontFamily: "'Satoshi', system-ui", fontSize: 13, color: RUST, marginTop: 16 }}>
                   Error: {error}

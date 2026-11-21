@@ -22,18 +22,12 @@ async function readJsonBody(req) {
   return raw ? JSON.parse(raw) : {};
 }
 
-// Each brief goes to Notion and to Patrick's inbox. The client sees success
-// once at least one of them has it, so a single outage doesn't lose a brief.
+// The questionnaire goes to Patrick's inbox. Sprint briefs also go to Notion
+// and can succeed if either delivery route is available.
 export async function handleCreativeBriefRequest(req, res, env) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return json(res, 405, { error: "Method not allowed." });
-  }
-
-  const notionEnabled = hasNotionToken(env);
-  const emailEnabled = hasResendApiKey(env);
-  if (!notionEnabled && !emailEnabled) {
-    return json(res, 500, { error: "No delivery route is configured on the server." });
   }
 
   let payload;
@@ -49,6 +43,12 @@ export async function handleCreativeBriefRequest(req, res, env) {
   }
 
   const brief = getBrief(packageId);
+  const notionEnabled = brief.id === "sprint" && hasNotionToken(env);
+  const emailEnabled = hasResendApiKey(env);
+  if (!notionEnabled && !emailEnabled) {
+    return json(res, 500, { error: "No delivery route is configured on the server." });
+  }
+
   const errors = [];
   let notionPage = null;
   let emailId = null;
